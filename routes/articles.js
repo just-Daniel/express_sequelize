@@ -10,7 +10,7 @@ app.get('/articles', (request, response) => {
 
 app.post('/articles', (request, response) => {
   const data = request.query;
-
+  console.log('My request: ', request )
   if (data.title && data.body) {
     if (data.id) {
       tokenUtils.getDecodedToken(request)

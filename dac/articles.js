@@ -51,9 +51,9 @@ const insertArticles = (title, body, decodedId) =>{
     Article.create({
       title: title,
       body: body,
-      user_id: decodedId
+      user_id: decodedId,
     }).then(function(article){
-      console.log('CHECK: ', decodedId);
+      console.log('CHECK: ', article);
       if (article) {
         resolve({status: 'OK'});
       } else {
@@ -65,41 +65,74 @@ const insertArticles = (title, body, decodedId) =>{
 };
 
 
+// const deleteArticles = (id, decodedId) => {
+//   const promise = new Promise((resolve, reject) => {
+//     db.query('SELECT * FROM articles WHERE id = ?',
+//         [id], (err, rows, fields) => {
+//           if (err) {
+//             reject(new ResponseError(err, 400));
+//           } else {
+//             if (rows[0].user_id === decodedId) {
+//               db.query(`DELETE FROM articles WHERE id = ?`,
+//                   [id], (err, rows, fields) => {
+//                     if (err) {
+//                       reject(new ResponseError('Unable to delete article ' + err, 400));
+//                     } else {
+//                       resolve({status: 'OK'});
+//                     }
+//                   });
+//             } else {
+//               reject(new ResponseError(
+//                   `User doesn't have permissions to delete this articles! ` + err, 400));
+//             }
+//           }
+//         });
+//   });
+//   return promise;
+// };
+
+
 const deleteArticles = (id, decodedId) => {
   const promise = new Promise((resolve, reject) => {
-    db.query('SELECT * FROM articles WHERE id = ?',
-        [id], (err, rows, fields) => {
-          if (err) {
-            reject(new ResponseError(err, 400));
-          } else {
-            if (rows[0].user_id === decodedId) {
-              db.query(`DELETE FROM articles WHERE id = ?`,
-                  [id], (err, rows, fields) => {
-                    if (err) {
-                      reject(new ResponseError('Unable to delete article ' + err, 400));
-                    } else {
-                      resolve({status: 'OK'});
-                    }
-                  });
-            } else {
-              reject(new ResponseError(
-                  `User doesn't have permissions to delete this articles! ` + err, 400));
-            }
-          }
-        });
+    
+  Article.findAll({ where: { id: id }})
+    .then((articles) => {
+      if (articles[0].user_id === decodedId) {
+
+        Article.destroy({ where: { id: id } })
+          .then(() => resolve({status: 'OK'}))
+          .catch(err => 
+            reject(new ResponseError('Unable to delete article ' + err, 400))
+            )
+      } else {
+        reject(new ResponseError(
+          `User doesn't have permissions to delete this articles! ` + err, 400));
+      }
+    })
+    .catch(err => reject(new ResponseError(err, 400)));
   });
   return promise;
 };
 
+
+// const getAllArticles = () => {
+//   const promise = new Promise((resolve, reject) => {
+//     db.query('SELECT * FROM articles', [], (err, rows, fields) => {
+//       if (err) {
+//         reject(new ResponseError(err, 400));
+//       } else {
+//         resolve(rows);
+//       }
+//     });
+//   });
+//   return promise;
+// };
+
 const getAllArticles = () => {
   const promise = new Promise((resolve, reject) => {
-    db.query('SELECT * FROM articles', [], (err, rows, fields) => {
-      if (err) {
-        reject(new ResponseError(err, 400));
-      } else {
-        resolve(rows);
-      }
-    });
+    Article.findAll()
+      .then(articles => resolve(articles))
+      .catch(err => reject(new ResponseError(err, 400)))
   });
   return promise;
 };

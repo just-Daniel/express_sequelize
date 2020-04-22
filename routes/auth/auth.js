@@ -16,7 +16,6 @@ app.use('*', function(request, response, next) {
 
 app.get('/auth', (request, response, next) => {
   User.findAll().then(function(user) {
-    console.log(user);
     if (user) {
       response.send(user);
     } else {
