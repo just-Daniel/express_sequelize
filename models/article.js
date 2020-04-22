@@ -1,9 +1,9 @@
 const Article = sequelize.define('article', {
   title: {
-    type: Sequelize.STRING
+    type: Sequelize.STRING,
   },
   body: {
-    type: Sequelize.STRING
+    type: Sequelize.STRING,
   },
   user_id: {
     type: Sequelize.INTEGER,
@@ -15,5 +15,4 @@ const Article = sequelize.define('article', {
     },
   },
 });
-  
 module.exports = Article;

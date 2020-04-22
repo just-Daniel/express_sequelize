@@ -26,8 +26,8 @@ Article.associate = () => Article.belongsTo(User);
 // sequelize.sync({force: true});
 
 sequelize.sync()
-  .then(res => console.log('So, all good!'))
-  .catch(err => console.log(err));
+    .then((res) => console.log('So, all good!'))
+    .catch((err) => console.log(err));
 
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;

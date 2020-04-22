@@ -31,7 +31,7 @@ app.post('/register', function(req, response) {
   User.create({
     name: data.name,
     password: hashedPassword,
-  }).then(function(user){
+  }).then(function(user) {
     if (user) {
       const token = jwt.sign({id: user.id, password: hashedPassword}, config.secret, {
         expiresIn: 86400, // expires in 24 hours
@@ -44,7 +44,6 @@ app.post('/register', function(req, response) {
 });
 
 
-
 app.post('/login', function(req, response) {
   const data = req.query;
   const hashedPassword = crypto.createHash('md5').update(data.password).digest('hex');
@@ -52,21 +51,21 @@ app.post('/login', function(req, response) {
   User.findOne({
     where: {
       name: data.name,
-      password: hashedPassword
-    }
-  }).then(function(user){
+      password: hashedPassword,
+    },
+  }).then(function(user) {
     if (user) {
       const token = jwt.sign({id: user.id, password: hashedPassword}, // I use user.id instead user[0].id
-        config.secret, {
-          expiresIn: 86400, // expires in 24 hours
-        });
-        console.log('CHECK: ', token)
+          config.secret, {
+            expiresIn: 86400, // expires in 24 hours
+          });
+      console.log('CHECK: ', token);
       response.send({auth: true, token: token});
-        if (user.length === 0) {
-          response.status(400).send({error: 'Username or password is incorrect'});
-        };
+      if (user.length === 0) {
+        response.status(400).send({error: 'Username or password is incorrect'});
+      };
     } else {
       response.status(400).send(err);
     }
-  })
+  });
 });

@@ -8,9 +8,9 @@ const getTokenUser = (request) => {
     getDecodedToken(request)
         .then((decoded) => User.findOne( {where: {
           id: decoded.id,
-          password: decoded.password
-        }
-      }).then((row) => resolve(row)))
+          password: decoded.password,
+        },
+        }).then((row) => resolve(row)))
         .catch((error) => reject(error));
   });
   return promise;
