@@ -10,13 +10,10 @@ app.get('/articles', (request, response) => {
 
 app.post('/articles', (request, response) => {
   const data = request.query;
-  console.log('My request: ', request );
   if (data.title && data.body) {
-    console.log('MY CODE: ', data.title, data.body);
     if (data.id) {
       tokenUtils.getDecodedToken(request)
           .then((decoded) => {
-            console.log('CHECK DECODED: ', decoded);
             articlesDac.updateArticles(
                 data.id, data.title, data.body, decoded.id)
                 .then((articlesStatus) => response.send(articlesStatus));

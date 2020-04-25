@@ -16,8 +16,8 @@ app.use(express.json());
 require('./db/db');
 
 require('./routes/auth/auth');
-// require('./routes/articles');
-// require('./routes/comments');
+require('./routes/articles');
+require('./routes/comments');
 
 
 app.listen(3000, '127.0.0.1', function() {
