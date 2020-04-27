@@ -41,15 +41,23 @@ const getAllComments = () => {
 const updateComments = (id, decodedId, description) => {
   const promise = new Promise((resolve, reject) => {
     Comment.findByPk(id)
-        .then((comments) => {
-          if (comments.user_id === decodedId) {
-            Comment.update({description: description}, {where: {id: id}})
-                .then(() => resolve({status: 'OK'}))
-                .catch((err) => reject(new ResponseError(
-                    'Unable to update ' + err, 404)));
+        .then((comment) => {
+          if (comment) {
+            if (comment.user_id === decodedId) {
+              Comment.update({description: description}, {where: {id: id}})
+                  // .then(() => resolve({status: 'OK'}))
+                  .then((result) => {
+                    console.log('ok', result);
+                    resolve(result);
+                  })
+                  .catch((err) => reject(new ResponseError(
+                      'Unable to update ' + err, 404)));
+            } else {
+              reject(new ResponseError(
+                  'User doesn\'t have permissions to update this comments! ', 400));
+            }
           } else {
-            reject(new ResponseError(
-                'User doesn\'t have permissions to update this comments! '+ err, 400));
+            reject(new ResponseError(`Id: "${id}" not found `, 400));
           }
         })
         .catch(reject(new ResponseError(err, 400)));

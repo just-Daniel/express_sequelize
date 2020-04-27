@@ -5,20 +5,24 @@ const updateArticles = (id, title, body, decodedId) =>{
   const promise = new Promise((resolve, reject) => {
     Article.findByPk(id)
         .then((articles) => {
-          if (articles.user_id === decodedId) {
-            Article.update({title: title, body: body}, {where: {id: id}})
-                .then((articles) => {
-                  if (articles.length === 0) {
-                    reject(new ResponseError(`Id: "${id}" not found ` + err, 400));
-                  } else {
-                    resolve({status: 'OK'});
-                  }
-                })
-                .catch((err) => reject(new ResponseError(
-                    'Unable to update article ' + err, 400)));
+          if (articles) {
+            if (articles.user_id === decodedId) {
+              Article.update({title: title, body: body}, {where: {id: id}})
+                  .then((articles) => {
+                    if (articles.length === 0) {
+                      reject(new ResponseError(`Id: "${id}" not found ` + err, 400));
+                    } else {
+                      resolve({status: 'OK'});
+                    }
+                  })
+                  .catch((err) => reject(new ResponseError(
+                      'Unable to update article ' + err, 400)));
+            } else {
+              reject(new ResponseError(
+                  `User doesn't have permissions to edit this articles! ` + err, 400));
+            }
           } else {
-            reject(new ResponseError(
-                `User doesn't have permissions to edit this articles! ` + err, 400));
+            reject(new ResponseError(`Id: "${id}" not found `, 400));
           }
         })
         .catch((err) => reject(new ResponseError(err, 400)));
