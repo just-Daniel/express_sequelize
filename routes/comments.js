@@ -17,15 +17,13 @@ app.post('/comments', (request, response) => {
       tokenUtils.getDecodedToken(request)
           .then((decoded) => commentsDac.updateComments(
               data.id, decoded.id, data.description)
-              .then((commentsStatus) => response.send(commentsStatus))
-              .catch((err) => response.status(err.status).send(err)))
+              .then((commentsStatus) => response.send(commentsStatus)))
           .catch((err) => response.status(err.status || 400).send(err));
     } else {
       tokenUtils.getDecodedToken(request)
           .then((decoded) => commentsDac.insertComments(
               data.description, data.article_id, decoded.id)
-              .then((commentsStatus) => response.send(commentsStatus))
-              .catch((err) => response.status(err.status).send(err.message)))
+              .then((commentsStatus) => response.send(commentsStatus)))
           .catch((err) => response.status(err.status).send(err.message));
     }
   } else {

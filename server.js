@@ -11,7 +11,8 @@ const cors = require('cors');
 
 app = express();
 app.use(cors());
-app.use(express.json());
+app.use(express.json()); // повертає JSON замість об'єкта, при запиті з браузера
+// це коли ми пишемо щось в тілі а не в хедері
 
 require('./db/db');
 

@@ -13,19 +13,15 @@ app.post('/articles', (request, response) => {
   if (data.title && data.body) {
     if (data.id) {
       tokenUtils.getDecodedToken(request)
-          .then((decoded) => {
-            articlesDac.updateArticles(
-                data.id, data.title, data.body, decoded.id)
-                .then((articlesStatus) => response.send(articlesStatus))
-                .catch((err) => response.status(err.status).send(err.message));
-          })
+          .then((decoded) => articlesDac.updateArticles(
+              data.id, data.title, data.body, decoded.id)
+              .then((articlesStatus) => response.send(articlesStatus)))
           .catch((err) => response.status(err.status).send(err.message));
     } else {
       tokenUtils.getDecodedToken(request)
           .then((decoded) => articlesDac.insertArticles(
               data.title, data.body, decoded.id)
-              .then((articlesStatus) => response.send(articlesStatus))
-              .catch((err) => response.status(err.status).send(err.message)))
+              .then((articlesStatus) => response.send(articlesStatus)))
           .catch((err) => response.status(err.status).send(err.message));
     }
   } else {
