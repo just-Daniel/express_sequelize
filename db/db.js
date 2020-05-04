@@ -23,11 +23,11 @@ const Comment = require('../models/comment');
 User.associate = () => User.hasMany(Article);
 Article.associate = () => Article.belongsTo(User);
 
-// sequelize.sync({force: true});
+sequelize.sync({force: true});
 
-sequelize.sync()
-    .then((res) => console.log('So, all good!'))
-    .catch((err) => console.log(err));
+// sequelize.sync()
+//     .then((res) => console.log('So, all good!'))
+//     .catch((err) => console.log(err));
 
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;

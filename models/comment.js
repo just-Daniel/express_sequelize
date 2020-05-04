@@ -5,11 +5,11 @@ const Comment = sequelize.define('comment', {
   article_id: {
     type: Sequelize.INTEGER,
     allowNull: false,
-    // primaryKey: true,
     references: {
       model: 'articles',
       key: 'id',
     },
+    onDelete: 'cascade',
   },
   user_id: {
     type: Sequelize.INTEGER,
